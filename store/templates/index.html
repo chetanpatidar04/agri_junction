@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> KKSK </title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <h1> {{products}}</h1>
+    <h1> {% for product in products %}
+        <table>
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.category}}</td>
+                <td>{{product.price}}</td>
+            </tr>
+        </table>
+        {%endfor%}
+    </h1>
+</body>
+
+</html>
