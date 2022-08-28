@@ -14,14 +14,15 @@ def index(request):
     else:
         products = Product.get_all_products()
 
-
     data = {}
     data["products"] = products
-    data["categories"] =  categories
+    data["categories"] = categories
 
     # return render(request,'orders/orders.html')
     # print(data["categories"])
 
-    return render(request,'index.html',{"data":data})
+    return render(request, 'index.html', {"data": data})
 
 
+def signup(request):
+    return render(request,"signup.html")
