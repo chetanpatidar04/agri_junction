@@ -1,15 +1,28 @@
 {% extends "base.html"%}
 {% block content%}
+
 <div class="container">
     <div class="col-lg-8 mx-auto border rounded pt-3">
         <h3 class="alert alert-light border rounded text-center"> Create an Account</h3>
-        <form class="needs-validation" novalidate>
+        <form action="/signup" method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div>
+            {%endif%}
+
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="validationCustom01">First name</label>
-                    <input type="text" class="form-control form-control-sm" id="validationCustom01"
-                        placeholder="First name" required>
-                    <div class=" invalid-feedback">
+                    <input type="text" name="first_name" class="form-control form-control-sm" id=""
+                        placeholder="First name" maxlength="40" minlength="2" required value = {{values.first_name}}>
+                        <!-- {% if error %}
+                        <div class="invalid-feedback">
+                            {{error}}
+                        </div>
+                        {%endif%} -->
+                    <div class="invalid-feedback">
                         Please enter first name
                     </div>
                     <div class="valid-feedback">
@@ -18,8 +31,8 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="validationCustom02">Last name</label>
-                    <input type="text" class="form-control form-control-sm" id="validationCustom02"
-                        placeholder="Last name" required>
+                    <input type="text" name="last_name" class="form-control form-control-sm" id=""
+                        placeholder="Last name" maxlength="40" minlength="2" required value = {{values.last_name}}>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -27,13 +40,12 @@
                         Please enter last name
                     </div>
                 </div>
-
             </div>
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="validationCustom04">Email</label>
-                    <input type="email" class="form-control form-control-sm" id="validationCustom04"
-                        placeholder="example@gmail.com" required>
+                    <input type="email" name="email" class="form-control form-control-sm" id="validationCustom03"
+                        placeholder="example@gmail.com"  maxlength="100" required value = {{values.email}}>
                     <div class="invalid-feedback">
                         Please provide a valid email.
                     </div>
@@ -43,10 +55,11 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="validationCustom04">Password</label>
-                    <input type="password" class="form-control form-control-sm" id="validationCustom04"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="********" required>
+                    <input type="password" name="password" class="form-control form-control-sm" id="validationCustom04"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="********" maxlength="200" required>
                     <div class=" invalid-feedback">
-                        Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more
+                        Must contain at least one number and one uppercase and lowercase letter, and at least 8 or
+                        more
                         characters
                     </div>
                     <div class="valid-feedback">
@@ -55,8 +68,8 @@
                 </div>
                 <div class="col-md-12 mb-3">
                     <label for="validationCustom04">Mobile number</label>
-                    <input type="tel" class="form-control form-control-sm" id="validationCustom04" pattern="[0-9]{10}"
-                        placeholder="0123456789" required>
+                    <input type="tel" name="mob_number" class="form-control form-control-sm" id="validationCustom05"
+                        pattern="[0-9]{10}" placeholder="0123456789" maxlength="10" required value = {{values.mob_number}}>
                     <div class=" invalid-feedback">
                         Please enter mobile number
                     </div>
@@ -67,8 +80,8 @@
                 <div class="col-md-12 mb-3">
                     <!-- <div class="form-group"> -->
                     <label for="inputAddress">Address</label>
-                    <input type="text" class="form-control form-control-sm" id="inputAddress" placeholder="1234 Main St"
-                        required>
+                    <input type="text" name="address" class="form-control form-control-sm" id="inputAddress"
+                        placeholder="1234 Main St" maxlength="500" required value = {{values.address}}>
                     <div class=" invalid-feedback">
                         Please enter address </div>
                     <div class="valid-feedback">
@@ -79,7 +92,8 @@
             <div class="form-row">
                 <div class=" col-md-4 mb-3">
                     <label for="inputCity">City</label>
-                    <input type="text" class="form-control form-control-sm" id="inputCity" placeholder="City" required>
+                    <input type="text" name="city" class="form-control form-control-sm" id="inputCity"
+                        placeholder="City" maxlength="50"  required value = {{values.city}}>
                     <div class=" invalid-feedback">
                         Please enter city </div>
                     <div class="valid-feedback">
@@ -88,14 +102,15 @@
                 </div>
                 <div class=" col-md-4 mb-3">
                     <label for="inputState">State</label>
-                    <select id="inputState" class="form-control form-control-sm">
+                    <select id="inputState" class="form-control form-control-sm" maxlength="50" >
                         <option selected>Choose...</option>
                         <option>...</option>
                     </select>
                 </div>
                 <div class=" col-md-4 mb-3">
                     <label for="inputZip">Pincode</label>
-                    <input type="text" class="form-control form-control-sm" id="inputZip" placeholder="54321" required>
+                    <input type="text" name="pincode" q2qclass="form-control form-control-sm" id="inputZip"
+                        placeholder="465110" maxlength="6" required value = {{values.pincode}}>
                     <div class=" invalid-feedback">
                         Please enter pincode </div>
                     <div class="valid-feedback">
@@ -106,7 +121,7 @@
             <div class=" form-row ">
                 <div class=" col-md-4 mb-3">
                     <button class="btn btn-primary btn-sm" type="submit">Signup</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm">Signup</button>
+                    <button type="submit" class="btn btn-outline-primary btn-sm">Signup</button>
                     <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Block level button</button> -->
                 </div>
             </div>
@@ -133,7 +148,8 @@
                 }, false);
             })();
         </script>
+
     </div>
 </div>
-
+<!-- </form> -->
 {%endblock%}
