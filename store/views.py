@@ -1,11 +1,13 @@
 from sre_parse import CATEGORIES
 # from unicodedata import category
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from .models.product import Product
 from .models.category import Category
 from django.http import HttpResponse
 from .models.customer import Customer
+from django.contrib.auth.hashers import check_password
+
 
 def index(request):
     products = None
@@ -23,7 +25,7 @@ def index(request):
 
 def signup(request):
     if request.method == "GET":
-        return render(request,"signup.html")
+        return render(request, "signup.html")
     else:
         post_data = request.POST
         first_name = post_data.get("first_name")
@@ -32,24 +34,24 @@ def signup(request):
         password = post_data.get("password")
         mob_number = post_data.get("mob_number")
         address = post_data.get("address")
-        city = post_data.get("city")        
+        city = post_data.get("city")
         state = post_data.get("state")
         if state is None:
             state = ""
         pincode = post_data.get("pincode")
-          # validation
+        # validation
         value = {
             'first_name': first_name,
             'last_name': last_name,
             'mob_number': mob_number,
             'email': email,
-            'address':address,
-            'city':city,
+            'address': address,
+            'city': city,
             'state': state,
             'pincode': pincode
         }
         error_message = None
-        
+
         customer = Customer(first_name=first_name,
                             last_name=last_name,
                             email=email,
@@ -62,8 +64,8 @@ def signup(request):
         # response = customer.register()
         # if response == "signup success":
         #     return redirect("homepage")
-        # else:    
-        #     return render(request, 'signup.html') 
+        # else:
+        #     return render(request, 'signup.html')
         error_message = validateCustomer(customer)
         if not error_message:
             customer.password = make_password(customer.password)
@@ -75,6 +77,7 @@ def signup(request):
                 'values': value
             }
             return render(request, 'signup.html', data)
+
 
 def validateCustomer(customer):
     error_message = None
@@ -94,11 +97,38 @@ def validateCustomer(customer):
         error_message = 'Password must be 6 char long'
     elif len(customer.email) < 5:
         error_message = 'Email must be 5 char long'
-    elif customer.isExists_email() and customer.isExists_mob_number() :        
+    elif customer.isExists_email() and customer.isExists_mob_number():
         error_message = 'Email address and Mobile Number Already Registered..'
     elif customer.isExists_email():
         error_message = 'Email Address Already Registered..'
     # saving
-    elif customer.isExists_mob_number():        
-        error_message = 'Mobile Number Already Registered..'    
+    elif customer.isExists_mob_number():
+        error_message = 'Mobile Number Already Registered..'
     return error_message
+
+
+def customer_login(request):
+    if request.method == "GET":
+        return render(request, "login.html")
+    else:
+        email_or_number = request.POST.get("email")
+        password = request.POST.get("password")
+        error_message = None
+        try:
+            customer = Customer.get_customer_by_email(email_or_number)
+        except Customer.DoesNotExist:
+            customer = False      
+        if customer:
+            flag = check_password(password, customer.password)
+            if flag:
+                return redirect("homepage")
+            else:
+                print("else")
+                if email_or_number.isnumeric():
+                    error_message = "Phone number or password invalid !!"
+                else:
+                    error_message = "Email or password invalid !!"
+        else:
+            error_message = "Email or password invalid !!"
+        return render(request, "login.html", {"error": error_message})
+
