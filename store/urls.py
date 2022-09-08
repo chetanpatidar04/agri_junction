@@ -1,12 +1,13 @@
-from django.contrib import admin
 from django.urls import path
-from .views import index,signup,customer_login
+from .views.signup import Signup
+from .views.login import Login
+from .views.home import Index
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('',index, name="homepage"),
-    path('signup',signup),
-    path('login',customer_login),
+    path('',Index.as_view(), name="homepage"),
+    path('signup',Signup.as_view()),
+    path('login',Login.as_view()),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
