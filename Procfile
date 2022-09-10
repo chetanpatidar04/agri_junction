@@ -1,0 +1,1 @@
+web: waitress-serve --port=8085 kksk.wsgi:application
