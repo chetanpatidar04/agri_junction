@@ -1,1 +1,1 @@
-web: waitress-serve --port=8085 kksk.wsgi:application
+web: waitress-serve --port=$PORT kksk.wsgi:application
