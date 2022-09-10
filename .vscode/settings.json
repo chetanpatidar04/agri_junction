@@ -1,0 +1,8 @@
+{
+    "gitHistory.alwaysPromptRepositoryPicker": true,
+    "gitHistory.hideCommitViewExplorer": true,
+    "git.enabled": true,
+    "git.decorations.enabled": true,
+    "git.autorefresh": true,
+    "python.formatting.provider": "autopep8"
+}
