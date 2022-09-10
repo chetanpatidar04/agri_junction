@@ -8,4 +8,4 @@ class Category(models.Model):
         return Category.objects.all()
 
     def __str__(self):
-        return self.name
+        return (self.name)
