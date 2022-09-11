@@ -13,7 +13,6 @@ class Order(models.Model):
     address = models.CharField(max_length=50, default="", blank=True)
     mob_number = models.CharField(max_length=12, default="", blank=True)
     date = models.DateTimeField(default=datetime.datetime.today())
-    status = models.BooleanField(default=False)
 
     def place_order(self):
         self.save()
