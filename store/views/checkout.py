@@ -13,13 +13,13 @@ class Checkout(View):
         cart = request.session.get("cart")
         products = Product.get_products_by_id (list(cart.keys()))
         for product in products:
-            order = Order(customer = Customer(id = customer),
+            order = Order(customer=Customer(id=customer),
                             product = product,
                             price=product.price,
                             quantity=cart.get(str(product.id)),
                             address=address,
                             mob_number = phone)
-            order.save()
+            order.place_order()
         request.session["cart"]={}
         if order_page_flag:
             return redirect("view_order")
