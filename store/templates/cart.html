@@ -3,6 +3,36 @@
 {% load cart%}
 {% load custom_filter%}
 <div class="container-fluid mt-3">
+    {% if cart_empty.flag %}
+    <div class="container-fluid  mt-100">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Cart</h5>
+                    </div>
+                    <div class="card-body cart">
+                        <div class="col-sm-12 empty-cart-cls text-center">
+                            <!-- <div class="col-6"> -->
+                            <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png"
+                                width="130" height="130" class="img-fluid mb-4 mr-3 mt-3">
+                            <!-- </div> -->
+                            <!-- <div class="col-sm-6"> -->
+                            <h3><strong>Your Cart is Empty</strong></h3>
+                            <h4>Once you have added items to your shopping cart</h4>
+                            <h4>You will be able to place order</h4>
+                            <!-- <div class="nav-previous"> -->
+                            <a href="/" class="btn btn-dark cart-btn-transform m-3" data-abc="true"> <i
+                                    class="fa fa-chevron-left"></i> Continue Shopping</a>
+                            <!-- </div> -->
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
     <div class="border border-secondary rounded p-4 m-4">
         <div class="card border mx-auto">
             <div class="p-3 card-header text-primary">
@@ -25,12 +55,14 @@
                 {% for product in products %}
                 <div class="card  mt-3">
                     <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img class="rounded" src="{{product.image.url}}" alt="...">
+                        <div class="col-md-4">                            
+                            <img style="height: 150px; width:150px;" class="rounded mt-2 ml-2 mb-2" src="{{product.image.url}}" alt="">
                         </div>
                         <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">{{product.name}}</h5>
+                            <div class="card-body">                                
+                                <!-- <h5 class="card-title">{{product.name}}</h5> -->
+                                <h5 class="card-title">{{product.name}} <button class="btn text-secondary float-right" title="Remove"><i
+                                    class="fa fa-trash"></i></button></h5>
                                 <p class="card-text">This is a wider card with supporting text below as a natural
                                     lead-in to
                                     additional content. This content is a little bit longer.</p>
@@ -44,8 +76,9 @@
                 <div class="m-2 p-2 mt-2">
                     <a href="#" data-toggle="modal" data-target="#exampleModal"
                         class="btn btn-dark rounded col-lg-3 float-right mr-2 mt-2 ">Place order</a>
-                    <a href="/" class="btn btn-outline-dark border rounded col-lg-3 float-right mr-2 mt-2"> Continue
-                        shopping</a>
+                    <a href="/" class="btn btn-outline-dark border rounded col-lg-3 float-right mr-2 mt-2"><i
+                            class="fa fa-chevron-left"></i> Continue
+                        Shopping</a>
                 </div>
             </div>
             <div class="col-sm-3 mx-auto mt-3">
@@ -92,4 +125,5 @@
             </div>
         </div>
     </div>
+    {% endif%}
     {% endblock %}
