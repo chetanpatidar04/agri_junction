@@ -38,7 +38,8 @@
         {% else %}
         {% for product in data.products %}
         <div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;">
-          <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+          <!-- <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap"> -->
+          <img style="height: 220px; width:270px;" class="rounded mt-2 ml-2 mb-2 mr-2" src="{{product.image.url}}" alt="">
           <div class="card-body">
             <h5>
               <p class="card-title">{{product.name}}</p>
