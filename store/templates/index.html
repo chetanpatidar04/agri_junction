@@ -56,8 +56,10 @@
               <p class="card-title">{{product.name}}</p>
             </h5>
             <p class="card-text">{{product.description}}</p>
+            <hr>
             <b>
-              <h6 class="card-title">{{product.price|currency}}</h6>
+              <h6 class="card-title float-left">Pack Size: {{product.pack_size}}</h6>
+              <h6 class="card-title float-right">{{product.price|currency}}</h6>
             </b>
             <!-- <p class="card-text"><b>{{product.price|currency}}</b></p> -->
             <!-- {{product | is_in_cart:request.session.cart }} -->

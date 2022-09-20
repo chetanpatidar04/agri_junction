@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from ..models.product import Product
 from ..models.category import Category
 from django.views import View
+from collections import OrderedDict
 
 
 class Index(View):
@@ -31,7 +32,7 @@ class Index(View):
                 Index.msg = True
                 request.session["msg"] = "Product added successfully"
         else:
-            cart = {}            
+            cart = OrderedDict()
             cart[product] = 1
             Index.msg = True
             request.session["msg"] = "Product added successfully"
@@ -42,8 +43,8 @@ class Index(View):
         print("home_get_request" , Index.msg)
         cart = request.session.get("cart")
         data = {}
-        if not cart:
-            request.session["cart"] = {}
+        if not cart:            
+            request.session["cart"] = OrderedDict()
         products = None
         categories = Category.get_all_categories()
         categoryID = request.GET.get('category')
@@ -59,4 +60,5 @@ class Index(View):
         if not Index.msg:
             request.session["msg"]= {}
         Index.msg = False
+        print(cart)
         return render(request, 'index.html', {"data": data})

@@ -9,11 +9,15 @@ class Product(models.Model):
     description = models.CharField(
         max_length=200, default='', null=True, blank=True)
     image = models.ImageField(upload_to='uploads/products/')
+    pack_size = models.CharField(max_length=12, default="", blank=False)
 
     @staticmethod
-    def get_products_by_id(ids):
-        print(Product.objects.filter(id__in=ids))
-        return Product.objects.filter(id__in=ids)
+    def get_products_by_id(ids):        
+        objects = Product.objects.filter(id__in=ids)
+        ids = [int(x) for x in ids]
+        objects = dict([(obj.id, obj) for obj in objects])
+        sorted_objects = [objects[id] for id in ids]
+        return sorted_objects
 
     @staticmethod
     def get_all_products():
