@@ -1,0 +1,598 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load cart%}
+{% load custom_filter%}
+<div class="container">
+    {% if cart_empty.flag %}
+    <div class="container-fluid  mt-100">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Cart</h5>
+                    </div>
+                    <div class="card-body cart">
+                        <div class="col-sm-12 empty-cart-cls text-center">
+                            <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png" width="130" height="130"
+                                class="img-fluid mb-4 mr-3 mt-3">
+                            <h3><strong>Your Cart is Empty</strong></h3>
+                            <h4>Once you have added items to your shopping cart</h4>
+                                <h4>You will be able to place order</h4>
+                            <a href="/" class="btn btn-dark cart-btn-transform m-3" data-abc="true">continue
+                                shopping</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4,ml-4">My Cart</p>
+        <div class="width: 15%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;">
+            <div style="width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #d9d9d9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+                font-family: ‘Open Sans’;
+                font-weight: 900;
+                color: #202020;
+                cursor: pointer;">+</div>
+            <div style="font-size: 20px;
+                font-family: ‘Open Sans’;
+                font-weight: 900;
+                color: #202020;">2</div>
+            <div style="width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #d9d9d9;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+                font-family: ‘Open Sans’;
+                font-weight: 900;
+                color: #202020;
+                cursor: pointer;">-</div>
+        </div>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sno.</th>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th style="width: 16%">Quantity</th>
+                    <th>Total</th>
+                    <th style="width: 1%"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td><img style="height:80px;" class="rounded" src="https://picsum.photos/536/354"> </td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.description}}</td>
+                    <td>{{product.price|currency}} </td>
+                    <td>                        
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <form action="/#{{product.id}}" method="POST">
+                                    {% csrf_token %}
+                                    <input hidden type="text" name="product" value="{{product.id}}">
+                                    <input hidden type="text" name="remove" value="True">
+                                    <input type="submit" value="-" class="btn btn-sm btn-outline-secondary " style="width: 40px;
+                                            /* height: 40px; */
+                                            border-radius: 50%;                                        
+                                            display: flex;
+                                            justify-content: center;
+                                            align-items: center;
+                                            font-size: 20px;
+                                            font-family: ‘Open Sans’;
+                                            font-weight: 900;
+                                            color: #202020;
+                                            cursor: pointer;">
+                                </form>
+                                <input type="text" class="form-control text-center mr-2 ml-2 " placeholder=""
+                                    aria-label="" aria-describedby="basic-addon1"
+                                    value={{product|cart_quantity:request.session.cart}} readonly>
+                                <form action="/#{{product.id}}" method="POST">
+                                    {% csrf_token %}
+                                    <input hidden type=" text" name="product" value="{{product.id}}">
+                                    <input type="submit" value="+" class="btn btn-sm btn-outline-secondary " style="width: 40px;
+                                            /* height: 40px; */
+                                            border-radius: 50%;                                        
+                                            display: flex;
+                                            justify-content: center;
+                                            align-items: center;
+                                            font-size: 20px;
+                                            font-family: ‘Open Sans’;
+                                            font-weight: 900;
+                                            color: #202020;
+                                            cursor: pointer;">
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{product|price_total:request.session.cart|currency}}</td>
+                    <!-- <td>
+                            <form action="/cart" method="POST">
+                                {% csrf_token %}
+                                <input hidden type="text" name="remove_cart_item" value="{{product.id}}">               
+                                    <button type="submit"><i class="fa fa-trash" aria-hidden="true"></i></a>                            
+                                </button>
+                            </form>
+                        </td> -->
+                </tr>
+                {% endfor %}
+            <tfoot>
+                <th colspan="4">
+                <th colspan="2">Total</th>
+                <th>{{products|total_cart_price:request.session.cart|currency}}</th>
+                </th>
+            </tfoot>
+            </tbody>
+        </table>
+        <hr>
+        <div class="m-3 p-3">
+            <a href="#" data-toggle="modal" data-target="#exampleModal"
+                class="btn btn-dark rounded col-lg-3 float-right">Place order</a>
+        <!-- <div class="nav-previous"> -->
+            <a href="/" class="btn btn-outline-dark border rounded col-lg-3 float-right mr-2"><i class="fa fa-chevron-left"></i> Continue Shopping</a>
+        <!-- </div> -->
+        </div>
+    </div>
+    {% endif %}
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Place Order</h5>
+                <hr>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">                   
+                    <form action="/checkout" method="POST">
+                        {%csrf_token%}
+                        <div class="form-group">
+                            <label for="">Address</label>
+                            <input type="text" name="address" id="" class="form-control" placeholder=""
+                                aria-describedby="helpId">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Mobile No</label>
+                            <input type="text" name="mob_number" id="" class="form-control"
+                                value={{request.session.cart}} aria-describedby="helpId">
+                        </div>
+                        <input type="text" name="order_page_flag" id="" class="form-control"
+                                value="True" aria-describedby="helpId" readonly hidden>
+                        <input type="submit" onclick="myFunction()"  class="btn btn-outline-dark col-lg-5 float-right" value="Check out">
+                        <script>
+                        function myFunction() {
+                        alert("I am an alert box!");
+                        }
+                        </script>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+
+
+-------------------------------------------------------fa-border
+{% extends 'base.html' %}
+{% block content %}
+{% load cart%}
+{% load custom_filter%}
+<div class="container-fluid mt-3">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4,ml-4">My Cart</p>
+        <div class="row">
+            <div id='products' class="col-lg-9 mx-auto mt-5b">
+                {% for product in products %}
+                <div class="card mb-3">
+                    <div class="row no-gutters text-center mr-2 ml-2 mt-2 mb-2">
+                        <div class="col-md-4">
+                            <img src="{{product.image.url}}" alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to
+                                    additional content. This content is a little bit longer.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <!-- <div class="row mx-auto">
+          {% if not data.product_flag %}
+          <div class="card mx-auto">
+            <div class="card-body">
+              <h4 class="card-title text-center"> Available soon </h4>
+              <h6 class="card-text text-center">Product under this category will be available soon.</h6> 
+              </br>       
+              <h4 class="card-title text-center"> जल्दी उपलब्ध होगा</h4>
+              <h6 class="card-text text-center">  इस श्रेणी के उत्पाद जल्द ही उपलब्ध होंगे |</h6>
+            </div>
+          </div>
+          
+          {% else %}
+          {% for product in data.products %}
+          <div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;">
+            <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+            <div class="card-body">
+              <h5>
+                <p class="card-title">{{product.name}}</p>
+              </h5>
+              <p class="card-text">{{product.description}}</p>
+              <b>
+                <h6 class="card-title">{{product.price|currency}}</h6>
+              </b>
+               <p class="card-text"><b>{{product.price|currency}}</b></p> -->
+                <!-- {{product | is_in_cart:request.session.cart }} -->
+            </div>
+
+            <div class="card-footer p-0 no-gutters">
+                {% if product|is_in_cart:request.session.cart %}
+                <div class="row no-gutters">
+                    <form action="/#{{product.id}}" class="col-2 " method="post">
+                        {% csrf_token %}
+                        <input hidden type="text" name='product' value='{{product.id}}'>
+                        <input hidden type="text" name='remove' value='True'>
+                        <input type="submit" value=" - " class="btn btn-block btn-light border-right">
+                    </form>
+                    <div class="text-center col">{{product|cart_quantity:request.session.cart}} in Cart</div>
+                    <form action="/#{{product.id}}" class="col-2 " method="post">
+                        {% csrf_token %}
+                        <input hidden type="text" name='product' value='{{product.id}}'>
+                        <input type="submit" value=" + " class="btn btn-block btn-light border-left">
+                    </form>
+                </div>
+                {% else %}
+                <form action="/#{{product.id}}" method="POST" class="btn-block">
+                    {% csrf_token %}
+                    <input hidden type="text" name='product' value='{{product.id}}'>
+                    <input type="submit" class="float-right btn btn-light  form-control" value="Add To Cart">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div> -->
+</div>
+<div class="col-sm-3 mx-auto">
+    <ul class="list-group mb-2 mx-auto">
+        <li class=" list-group-item list-group-item-dark active bg-dark text-center" aria-current="true">Categories /
+            श्रेणियाँ</li>
+        <a href="/" class="list-group-item list-group-item-action list-group-item-dark text-center"> All Products / सभी
+            उत्पाद</a>
+        {% for category in data.categories %}
+        <a href="/?category={{category.id}}"
+            class="list-group-item list-group-item-action list-group-item-dark text-center"> {{category.name}}</a>
+        {% endfor %}
+    </ul>
+    <div class="list-group mb-3 mx-auto">
+        <a href="#" class="list-group-item list-group-item-dark active bg-dark">Active item</a>
+        <a href="#" class="list-group-item list-group-item-action">Item</a>
+        <a href="#" class="list-group-item list-group-item-action disabled">Disabled item</a>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}
+================================================================
+{% extends 'base.html' %}
+{% block content %}
+{% load cart%}
+{% load custom_filter%}
+<div class="container-fluid mt-3">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4,ml-4">My Cart</p>
+        <div class="row">
+            <div class="card col-sm-9">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="..." alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                                additional content. This content is a little bit longer.</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-lg-3"> -->
+            <div class="col-sm-3 mx-auto">
+                <ul class="list-group mb-2 mx-auto">
+                    <li class=" list-group-item list-group-item-dark active bg-dark text-center" aria-current="true">
+                        Categories /
+                        श्रेणियाँ</li>
+                    <a href="/" class="list-group-item list-group-item-action list-group-item-dark text-center"> All
+                        Products / सभी
+                        उत्पाद</a>
+                    {% for category in data.categories %}
+                    <a href="/?category={{category.id}}"
+                        class="list-group-item list-group-item-action list-group-item-dark text-center">
+                        {{category.name}}</a>
+                    {% endfor %}
+                </ul>
+                <div class="list-group mb-3 mx-auto">
+                    <a href="#" class="list-group-item list-group-item-dark active bg-dark">Active item</a>
+                    <a href="#" class="list-group-item list-group-item-action">Item</a>
+                    <a href="#" class="list-group-item list-group-item-action disabled">Disabled item</a>
+                </div>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+========+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+{% extends 'base.html' %}
+{% block content %}
+{% load cart%}
+{% load custom_filter%}
+<div class="container-fluid mt-3">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4,ml-4">My Cart</p>
+        <hr>
+        <div class="row">
+            <div class="col-sm-9">
+                {% for product in products %}
+                <div class="card  mt-3">
+
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="..." alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to
+                                    additional content. This content is a little bit longer.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+            <div class="col-sm-3 mx-auto mt-3">
+                <ul class="list-group mb-2 mx-auto">
+                    <li class=" list-group-item list-group-item-dark active bg-dark text-center" aria-current="true">
+                        Categories /
+                        श्रेणियाँ</li>
+                    <a href="/" class="list-group-item list-group-item-action list-group-item-dark text-center"> All
+                        Products / सभी
+                        उत्पाद</a>
+                    {% for category in data.categories %}
+                    <a href="/?category={{category.id}}"
+                        class="list-group-item list-group-item-action list-group-item-dark text-center">
+                        {{category.name}}</a>
+                    {% endfor %}
+                </ul>
+                <div class="list-group mb-3 mx-auto">
+                    <a href="#" class="list-group-item list-group-item-dark active bg-dark">Active item</a>
+                    <a href="#" class="list-group-item list-group-item-action">Item</a>
+                    <a href="#" class="list-group-item list-group-item-action disabled">Disabled item</a>
+                </div>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}{% extends 'base.html' %}
+{% block content %}
+{% load cart%}
+{% load custom_filter%}
+<div class="container-fluid mt-3">
+    <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4,ml-4">My Cart</p>
+        <hr>
+        <div class="row">
+            <div class="col-sm-9">
+                {% for product in products %}
+                <div class="card  mt-3">
+
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="..." alt="...">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">This is a wider card with supporting text below as a natural
+                                    lead-in to
+                                    additional content. This content is a little bit longer.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+            </div>
+            <div class="col-sm-3 mx-auto mt-3">
+                <ul class="list-group mb-2 mx-auto">
+                    <li class=" list-group-item list-group-item-dark active bg-dark text-center" aria-current="true">
+                        Categories /
+                        श्रेणियाँ</li>
+                    <a href="/" class="list-group-item list-group-item-action list-group-item-dark text-center"> All
+                        Products / सभी
+                        उत्पाद</a>
+                    {% for category in data.categories %}
+                    <a href="/?category={{category.id}}"
+                        class="list-group-item list-group-item-action list-group-item-dark text-center">
+                        {{category.name}}</a>
+                    {% endfor %}
+                </ul>
+                <div class="list-group mb-3 mx-auto">
+                    <a href="#" class="list-group-item list-group-item-dark active bg-dark">Active item</a>
+                    <a href="#" class="list-group-item list-group-item-action">Item</a>
+                    <a href="#" class="list-group-item list-group-item-action disabled">Disabled item</a>
+                </div>
+                <!-- </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+000000000000000000000000000000000000000000000000000000000000000000000000
+{% extends 'base.html' %}
+{% block content %}
+{% load cart%}
+{% load custom_filter%}
+<div class="container-fluid mt-3">
+    {% if cart_empty.flag %}
+    <div class="container-fluid  mt-100">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Cart</h5>
+                    </div>
+                    <div class="card-body cart">
+                        <div class="col-sm-12 empty-cart-cls text-center">
+                            <!-- <div class="col-6"> -->
+                            <img src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png"
+                                width="130" height="130" class="img-fluid mb-4 mr-3 mt-3">
+                            <!-- </div> -->
+                            <!-- <div class="col-sm-6"> -->
+                            <h3><strong>Your Cart is Empty</strong></h3>
+                            <h4>Once you have added items to your shopping cart</h4>
+                            <h4>You will be able to place order</h4>
+                            <!-- <div class="nav-previous"> -->
+                            <a href="/" class="btn btn-dark cart-btn-transform m-3" data-abc="true"> <i
+                                    class="fa fa-chevron-left"></i> Continue Shopping</a>
+                            <!-- </div> -->
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="border border-secondary rounded p-4 m-4">
+        <div class="card border mx-auto">
+            <div class="p-3 card-header text-primary">
+                <h4>My Cart ({{request.session.cart.keys|length}})</h4>
+            </div>
+            <div class="card-body text-dark">
+                <p class="card-title">Primary card title : {{1234567890}}</p>
+                <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <h5 class="card-title">Primary card title</h5> -->
+                <p class="card-text"> Delivery Address : Some quick example text to build on the card title and make up
+                    the bulk
+                    of the card's content, Pincode : 465110</p>
+                <a href="#" class="btn btn-outline-secondary float-right mr-4">Change Address </a>
+            </div>
+        </div>
+        <!-- <h2 class="border border-secondary pl-4,ml-4 bg-light">My Cart ({{request.session.cart.keys|length}})</h2> -->
+        <hr>
+        <div class="row">
+            <div class="col-sm-9">
+                {% for product in products %}
+                <div class="card  mt-3">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">                            
+                            <img style="height: 150px; width:150px;" class="rounded mt-2 ml-2 mb-2" src="{{product.image.url}}" alt="">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">                                
+                                <!-- <h5 class="card-title">{{product.name}}</h5> -->
+                                <h5 class="card-title text-primary">{{product.name}} <button class="btn text-secondary float-right" title="Remove"><i
+                                    class="fa fa-trash"></i></button></h5>
+                                <p class="card-text">{{product.description}}</p>
+                                <h5>{{product|price_total:request.session.cart|currency}}</h5>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {%endfor%}
+                <hr>
+                <div class="m-2 p-2 mt-2">
+                    <a href="#" data-toggle="modal" data-target="#exampleModal"
+                        class="btn btn-dark rounded col-lg-3 float-right mr-2 mt-2 ">Place order</a>
+                    <a href="/" class="btn btn-outline-dark border rounded col-lg-3 float-right mr-2 mt-2"><i
+                            class="fa fa-chevron-left"></i> Continue
+                        Shopping</a>
+                </div>
+            </div>
+            <div class="col-sm-3 mx-auto mt-3">
+                <div class="card border-seconday mb-3 " style="max-width: 18rem;">
+                    <div class="card-header bg-light text-primary">
+                        <h4>Price Details</h4>
+                    </div>
+                    <div class="card-body text-dark">
+                        <div class="row">
+                            <h6 class="col-9 float-left">Sub-Total</h6>
+                            <h6 class="col-3 float-right">500</h6>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <h6 class="col-9 float-left">Delivery Charge</h6>
+                            <h6 class="col-3 float-right">Free</h6>
+                        </div>
+                    </div>
+                    <div class="card-footer ">
+                        <h6 class="float-left ">Amount Payable</h6>
+                        <h6 class="float-right">Free</h6>
+                    </div>
+                </div>
+                <div class="card bg-light mb-3" style="max-width: 18rem;">
+                    <div class="card-header text-primary">
+                        <h4>Price Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <h6 class="col-9 float-left">Sub-Total</h6>
+                            <h6 class="col-3 float-right">500</h6>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <h6 class="col-9 float-left">Delivery Charge</h6>
+                            <h6 class="col-3 float-right">10</h6>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <h6 class="col-9 float-left ">Delivery Charge</h6>
+                        <h6 class="col-3 float-right">20</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif%}
+    {% endblock %}

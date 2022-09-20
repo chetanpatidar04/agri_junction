@@ -66,7 +66,7 @@
                 <div class="card  mt-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img style="height: 150px; width:150px;" class="rounded mt-2 ml-2 mb-2"
+                            <img style="height: 150px; width:220px; object-fit: contain; " class="rounded mt-2 ml-2 mb-2"
                                 src="{{product.image.url}}" alt="">
                         </div>
                         <div class="col-md-8">
@@ -79,20 +79,15 @@
                                                 class="fa fa-trash"></i></button></h5>
                                 </form>
                                 <p class="card-text">{{product.description}}</p>
-
-
                                 <div class="mb-1">
                                     <button style="height:25px; width: 30px;" class="btn btn-sm"><i
                                             class="fa fa-minus"></i></button>
                                     <input style="height:25px; width: 35px;" class="text-center" id="product"
                                         value="{{product|cart_quantity:request.session.cart}}">
-                                    {{request.session.cart}}
                                     <button style="height:25px; width: 35px;" class="btn btn-sm width 25%"><i
                                             class="fa fa-plus"></i></button>
+                                    <h6 class="float-right">{{product|price_total:request.session.cart|currency}}</h6>
                                 </div>
-
-
-                                <h5>{{product|price_total:request.session.cart|currency}}</h5>
                             </div>
                         </div>
                     </div>
@@ -108,44 +103,19 @@
                 </div>
             </div>
             <div class="col-sm-3 mx-auto mt-3">
-                <div class="card border-seconday mb-3 " style="max-width: 18rem;">
-                    <div class="card-header bg-light text-primary">
+                <div class="card bg-light mb-3 " style="max-width: 18rem;">
+                    <div class="card-header text-primary">
                         <h4>Price Details</h4>
                     </div>
                     <div class="card-body text-dark">
-                        <div class="row">
-                            <h6 class="col-9 float-left">Sub-Total</h6>
-                            <h6 class="col-3 float-right">500</h6>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <h6 class="col-9 float-left">Delivery Charge</h6>
-                            <h6 class="col-3 float-right">Free</h6>
-                        </div>
+                        <h6 class="float-left">Sub-Total</h6>
+                        <h6 class="float-right">{{products|total_cart_price:request.session.cart|currency}}</h6>
+                        <h6 class="float-left">Delivery Charge</h6>
+                        <h6 class="float-right">Free</h6>
                     </div>
                     <div class="card-footer ">
                         <h6 class="float-left ">Amount Payable</h6>
                         <h6 class="float-right">Free</h6>
-                    </div>
-                </div>
-                <div class="card bg-light mb-3" style="max-width: 18rem;">
-                    <div class="card-header text-primary">
-                        <h4>Price Details</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <h6 class="col-9 float-left">Sub-Total</h6>
-                            <h6 class="col-3 float-right">500</h6>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <h6 class="col-9 float-left">Delivery Charge</h6>
-                            <h6 class="col-3 float-right">10</h6>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <h6 class="col-9 float-left ">Delivery Charge</h6>
-                        <h6 class="col-3 float-right">20</h6>
                     </div>
                 </div>
             </div>

@@ -15,12 +15,13 @@ class Cart(View):
             self.cart_msg = True
             request.session["cart_msg"] = "Product removed successfully"
             del cart[product_id]
-        request.session["cart"] = cart        
+        request.session["cart"] = cart
         return Cart.get(self, request)
     
     def get(self, request):
+        request.session["msg"] = {}
         if not self.cart_msg :            
-            request.session["cart_msg"] = {}        
+            request.session["cart_msg"] = {}
         ids = list(request.session.get('cart').keys())
         cart_empty = {}
         cart_empty["flag"] = False
