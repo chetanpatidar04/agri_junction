@@ -2,6 +2,17 @@
 {% block content %}
 {% load cart%}
 {% load custom_filter%}
+
+{% if request.session.cart_msg %}
+<script>
+    alertify.set('notifier', 'position', 'top-right');
+    var delay = alertify.get('notifier', 'delay');
+    alertify.set('notifier', 'delay', 2);
+    alertify.success("{{request.session.cart_msg}}");
+    alertify.set('notifier', 'delay', delay);
+</script>
+{% endif %}
+
 <div class="container-fluid mt-3">
     {% if cart_empty.flag %}
     <div class="container-fluid  mt-100">
@@ -48,7 +59,6 @@
                 <a href="#" class="btn btn-outline-secondary float-right mr-4">Change Address </a>
             </div>
         </div>
-        <!-- <h2 class="border border-secondary pl-4,ml-4 bg-light">My Cart ({{request.session.cart.keys|length}})</h2> -->
         <hr>
         <div class="row">
             <div class="col-sm-9">
@@ -64,12 +74,25 @@
                                 <form action="/cart" method="post">
                                     {% csrf_token %}
                                     <input hidden type="text" name='product_id' value='{{product.id}}'>
-                                    <h5 class="card-title text-primary">{{product.name}} <button type="submit" class="btn text-secondary float-right" title="Remove"><i
-                                        class="fa fa-trash"></i></button></h5>
+                                    <h5 class="card-title text-primary ">{{product.name}} <button type="submit"
+                                            class=" btn text-secondary float-right" title="Remove"><i
+                                                class="fa fa-trash"></i></button></h5>
                                 </form>
                                 <p class="card-text">{{product.description}}</p>
+
+
+                                <div class="mb-1">
+                                    <button style="height:25px; width: 30px;" class="btn btn-sm"><i
+                                            class="fa fa-minus"></i></button>
+                                    <input style="height:25px; width: 35px;" class="text-center" id="product"
+                                        value="{{product|cart_quantity:request.session.cart}}">
+                                    {{request.session.cart}}
+                                    <button style="height:25px; width: 35px;" class="btn btn-sm width 25%"><i
+                                            class="fa fa-plus"></i></button>
+                                </div>
+
+
                                 <h5>{{product|price_total:request.session.cart|currency}}</h5>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                             </div>
                         </div>
                     </div>

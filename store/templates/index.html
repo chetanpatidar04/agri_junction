@@ -4,12 +4,50 @@
 {% load custom_filter %}
 <!-- body -->
 <div class="container-fluid mt-3">
+
+
+
+  <!-- For a smooth slide-up:- -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {% if request.session.msg %}
+  <script>
+    alertify.set('notifier', 'position', 'top-right');
+    var delay = alertify.get('notifier', 'delay');
+    alertify.set('notifier', 'delay', 2);
+    alertify.success("{{request.session.msg}}");
+    alertify.set('notifier', 'delay', delay);
+  </script>
+  {% endif %}
+  
+
+
+
+
   <div class="row">
     <!-- filter -->
     <div class="col-sm-3 mx-auto">
       <ul class="list-group mb-2 mx-auto">
-        <li class=" list-group-item list-group-item-dark active bg-dark text-center" aria-current="true">Categories / श्रेणियाँ</li>
-        <a href="/" class="list-group-item list-group-item-action list-group-item-dark text-center"> All Products / सभी उत्पाद</a>
+        <li class=" list-group-item list-group-item-dark active bg-dark text-center" aria-current="true">Categories /
+          श्रेणियाँ</li>
+        <a href="/" class="list-group-item list-group-item-action list-group-item-dark text-center"> All Products / सभी
+          उत्पाद</a>
         {% for category in data.categories %}
         <a href="/?category={{category.id}}"
           class="list-group-item list-group-item-action list-group-item-dark text-center"> {{category.name}}</a>
@@ -28,18 +66,18 @@
         <div class="card mx-auto">
           <div class="card-body">
             <h4 class="card-title text-center"> Available soon </h4>
-            <h6 class="card-text text-center">Product under this category will be available soon.</h6> 
-            </br>       
+            <h6 class="card-text text-center">Product under this category will be available soon.</h6>
+            </br>
             <h4 class="card-title text-center"> जल्दी उपलब्ध होगा</h4>
-            <h6 class="card-text text-center">  इस श्रेणी के उत्पाद जल्द ही उपलब्ध होंगे |</h6>
+            <h6 class="card-text text-center"> इस श्रेणी के उत्पाद जल्द ही उपलब्ध होंगे |</h6>
           </div>
         </div>
-        
+
         {% else %}
         {% for product in data.products %}
         <div class="card mx-auto mb-3" id={{product.id}} style="width: 18rem;">
-          <!-- <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap"> -->
-          <img style="height: 220px; width:270px;" class="rounded mt-2 ml-2 mb-2 mr-2" src="{{product.image.url}}" alt="">
+          <img style="height: 220px; width:270px;" class="rounded mt-2 ml-2 mb-2 mr-2" src="{{product.image.url}}"
+            alt="">
           <div class="card-body">
             <h5>
               <p class="card-title">{{product.name}}</p>
@@ -51,6 +89,8 @@
             <!-- <p class="card-text"><b>{{product.price|currency}}</b></p> -->
             <!-- {{product | is_in_cart:request.session.cart }} -->
           </div>
+
+
 
           <div class="card-footer p-0 no-gutters">
             {% if product|is_in_cart:request.session.cart %}
@@ -72,7 +112,29 @@
             <form action="/#{{product.id}}" method="POST" class="btn-block">
               {% csrf_token %}
               <input hidden type="text" name='product' value='{{product.id}}'>
-              <input type="submit" class="float-right btn btn-light  form-control" value="Add To Cart">              
+              <input type="submit" class="float-right btn btn-light  form-control" value="Add To Cart" onclick="show()">
+
+
+
+              <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
+  <div style = "width: 30%;" class="alert alert-success text-center">
+    This is an example message...
+    </div>  
+<script type="text/javascript">  
+ $(document).ready(function () {   
+   window.setTimeout(function() {
+       $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
+           $(this).remove(); 
+       });
+   }, 5000);    
+   });  
+  </script>
+
+
+ -->
+
+
+
             </form>
             {% endif %}
           </div>
