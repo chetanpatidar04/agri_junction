@@ -3,13 +3,6 @@
 {% load cart%}
 {% load custom_filter%}
 
-
-
-
-
-
-
-
 {% if request.session.cart_msg %}
 <script>
     alertify.set('notifier', 'position', 'top-right');
@@ -19,7 +12,6 @@
     alertify.set('notifier', 'delay', delay);
 </script>
 {% endif %}
-
 <div class="container-fluid mt-3">
     {% if cart_empty.flag %}
     <div class="container-fluid  mt-100">
@@ -51,26 +43,71 @@
         </div>
     </div>
     {% else %}
+
+    {%csrf_token%}
     <div class="border border-secondary rounded p-4 m-4">
         <div class="card border mx-auto">
             <div class="p-3 card-header text-primary">
                 <h4>My Cart ({{request.session.cart.keys|length}})</h4>
             </div>
             <div class="card-body text-dark">
-                <p class="card-title">Primary card title : {{1234567890}}</p>
-                <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <h5 class="card-title">Primary card title</h5> -->
-                <p class="card-text"> Delivery Address : Some quick example text to build on the card title and make up
-                    the bulk
-                    of the card's content, Pincode : 465110</p>
-                <a href="#" class="btn btn-outline-secondary float-right mr-4">Change Address </a>
+                <p class="card-title"><i class="fa fa-mobile mr-3" aria-hidden="true"></i>Mob Number :
+                    {{request.session.mob_number}}</p>
+                <p class="card-text"><i class="fa fa-truck mr-3"></i> Delivery Address : {{request.session.address}},
+                    Pincode : {{request.session.pincode}}</p>
+                <a href="#" data-toggle="modal" data-target="#exampleModal"
+                    class="btn btn-secondary rounded col-sm-3 float-right">Change address or Mob number</a>
+                <!-- <a href="#" data-toggle="modal" data-target="#exampleModal"
+                        class="btn  btn-sm btn-outline-secondary float-right mr-4">Change Address or Mob Number</a> -->
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-light">
+                                <h5 class="modal-title" id="exampleModalLabel">Change address or Mob number</h5>
+                                <hr>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="modal-body">
+                                    <form action="/cart" method="POST">
+                                        {%csrf_token%}
+                                        <input hidden type="text" name="update_address" id="" value={{True}} readonly>
+                                        <div class="form-group">
+                                            <label for="">Mobile No</label>
+                                            <input type="text" name="mob_number" id="" class="form-control"
+                                                value="{{request.session.mob_number}}" aria-describedby="helpId">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Address</label>
+                                            <input type="text" name="address" id="" class="form-control"
+                                                value="{{request.session.address}}" aria-describedby="helpId">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Pincode</label>
+                                            <input type="text" name="pin_code" id="" class="form-control" placeholder=""
+                                                value="{{request.session.pincode}}" aria-describedby="helpId">
+                                        </div>
+                                        <input type="text" name="order_page_flag" id="" class="form-control"
+                                            value="True" aria-describedby="helpId" readonly hidden>
+                                        <input type="submit" class="btn btn-outline-dark col-lg-5 float-right"
+                                            value="Submit">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <hr>
         <div class="row">
             <div class="col-sm-9">
                 {% for product in products %}
-                <div class="card  mt-3">
+                <div class="card  mt-3" id={{product.id}}>
                     <div class="row no-gutters">
                         <div class="col-md-4">
                             <img style="height: 150px; width:265px; object-fit: contain; "
@@ -78,7 +115,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body mb-2">
-                                <form action="/cart" method="post">
+                                <form action="/cart#{{product.id}}" method="post">
                                     {% csrf_token %}
                                     <input hidden type="text" name='product_id' value='{{product.id}}'>
                                     <h5 class="card-title text-primary ">{{product.name}}
@@ -90,61 +127,65 @@
                                 <h6>Pack Size : {{product.pack_size}}</h6>
                                 <div class="mb-2">
                                     <!-- <button style="height:25px; width: 30px;" class="btn btn-sm"><i
-                                            class="fa fa-minus"></i></button> -->
-                                    <!-- <div class="row no-gutters "> -->
-                                        <form action="/cart" method="post">
-                                            {% csrf_token %}
-                                            <div class="row no-gutters float-left">
+                                            class="fa fa-minus"></i></button>-->
+                                    <!-- <div class="row no-gutters ">-->
+                                    <form action="/cart" method="post">
+                                        {% csrf_token %}
+                                        <div class="row no-gutters float-left">
                                             <input hidden type="text" name='prod_id' value='{{product.id}}'>
                                             <input hidden type="text" name='reduce' value='True'>
                                             <button type="submit" style="height:25px; width: 35px;"
                                                 class="btn btn-sm"><i class="fa fa-minus"></i></button>
-                                        </form>
-                                        <input style="height:25px; width: 35px;" class="text-center" id="product"
-                                            value="{{product|cart_quantity:request.session.cart}}" readonly>
-                                        <form action="/cart" method="post">
-                                            {% csrf_token %}
-                                            <input hidden type="text" name='prod_id' value='{{product.id}}'>
-                                            <button type="submit" style="height:25px; width: 35px;"
-                                                class="btn btn-sm"><i class="fa fa-plus"></i></button>
-                                        </form>
-                                        </div>
-                                        <div class="row float-right">
-                                        <h6 class="mr-3" >{{product|price_total:request.session.cart|currency}}</h6>
-                                    </div>
+                                    </form>
+                                    <input style="height:25px; width: 35px;" class="text-center" id="product"
+                                        value="{{product|cart_quantity:request.session.cart}}" readonly>
+                                    <form action="/cart#{{product.id}}" method="post">
+                                        {% csrf_token %}
+                                        <input hidden type="text" name='prod_id' value='{{product.id}}'>
+                                        <button type="submit" style="height:25px; width: 35px;" class="btn btn-sm"><i
+                                                class="fa fa-plus"></i></button>
+                                    </form>
+                                </div>
+                                <div class="row float-right">
+                                    <h6 class="mr-3 mb-3">{{product|price_total:request.session.cart|currency}}</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {%endfor%}
-                <hr>
-                <div class="m-2 p-2 mt-2">
-                    <a href="#" data-toggle="modal" data-target="#exampleModal"
-                        class="btn btn-dark rounded col-lg-3 float-right mr-2 mt-2 ">Place order</a>
-                    <a href="/" class="btn btn-outline-dark border rounded col-lg-3 float-right mr-2 mt-2"><i
-                            class="fa fa-chevron-left"></i> Continue
-                        Shopping</a>
-                </div>
             </div>
-            <div class="col-sm-3 mx-auto mt-3">
-                <div class="card bg-light mb-3 " style="max-width: 18rem;">
-                    <div class="card-header text-primary">
-                        <h4>Price Details</h4>
-                    </div>
-                    <div class="card-body text-dark">
-                        <h6 class="float-left">Sub-Total</h6>
-                        <h6 class="float-right">{{products|total_cart_price:request.session.cart|currency}}</h6>
-                        <h6 class="float-left">Delivery Charge</h6>
-                        <h6 class="float-right">Free</h6>
-                    </div>
-                    <div class="card-footer ">
-                        <h6 class="float-left ">Amount Payable</h6>
-                        <h6 class="float-right">Free</h6>
-                    </div>
+            {%endfor%}
+            <hr>
+            <div class="m-2 p-2 mt-2">
+                <form action="/checkout" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark rounded col-lg-3 float-right mr-2 mt-2">
+                        Place Order </button>
+                    <a href="/" class="btn btn-outline-dark border rounded col-lg-3 float-right mr-2 mt-2"><i
+                        class="fa fa-chevron-left"></i> Continue Shopping</a>
+                
+                </form>
+            </div>
+            </form>
+        </div>
+        <div class="col-sm-3 mx-auto mt-3">
+            <div class="card bg-light mb-3 " style="max-width: 18rem;">
+                <div class="card-header text-primary">
+                    <h4>Price Details</h4>
+                </div>
+                <div class="card-body text-dark">
+                    <h6 class="float-left">Sub-Total</h6>
+                    <h6 class="float-right">{{products|total_cart_price:request.session.cart|currency}}</h6>
+                    <h6 class="float-left">Delivery Charge</h6>
+                    <h6 class="float-right">Free</h6>
+                </div>
+                <div class="card-footer ">
+                    <h6 class="float-left ">Amount Payable</h6>
+                    <h6 class="float-right">Free</h6>
                 </div>
             </div>
         </div>
     </div>
-    {% endif%}
-    {% endblock %}
+</div>
+{% endif%}
+{% endblock %}

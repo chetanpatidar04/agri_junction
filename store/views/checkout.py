@@ -7,21 +7,20 @@ from store.models.orders import Order
 
 
 class Checkout(View):
-    def post(self, request):
+    def post(self, request):        
         address = request.POST.get("address")
         phone = request.POST.get("mob_number")
         order_page_flag = request.POST.get("order_page_flag", False)
         customer = request.session.get("customer")
         cart = request.session.get("cart")
-        print("checkout_cart",cart)
         products = Product.get_products_by_id(list(cart.keys()))
         for product in products:
-            order = Order(customer=Customer(id=customer),
+            order = Order(customer= Customer(id=customer),
                           product=product,
                           price=product.price,
                           quantity=cart.get(str(product.id)),
-                          address=address,
-                          mob_number=phone)
+                          address = request.session.get("address","N/A"),
+                          mob_number = request.session.get("mob_number","N/A"))
             order.place_order()
         request.session["cart"] = OrderedDict()
         if order_page_flag:
