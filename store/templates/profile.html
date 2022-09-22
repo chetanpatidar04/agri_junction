@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load cart%}
+{% load custom_filter%}
+<div class="container-fluid mt-3">
+    <div class="border border-secondary rounded p-4 m-4">
+        <div class="card border mx-auto">
+            <div class="p-3 card-header text-primary">
+                <h4>{{fullname}}</h4>
+            </div>
+            <div class="card-body text-dark">
+                <div class="row">
+                    <div class="col-sm-3 mx-auto mt-3">
+                        <div class="card bg-light mb-3 " style="max-width: 18rem;">
+                            <div class="card border-secondary">
+                                <ul class="list-group ">
+                                    <!-- <form>
+                                        <input hidden type="text" value="True" name="profile_information">
+                                        <input
+                                            class="list-group-item list-group-item-action list-group-item-dark text-center"
+                                            type="submit" value="Profile Information" readonly>
+                                    </form> -->
+                                    <form action="/profile" method="POST">
+                                        {% csrf_token %}
+                                        <input hidden type="text" value="True" name="my_orders">
+                                        <input
+                                            class="list-group-item list-group-item-action list-group-item-dark text-center"
+                                            type="submit" value="My Orders" readonly>
+                                    </form>
+                                    <!-- <li class="list-group-item bg-light text-center">Profile Information</li> -->
+                                    <li class="list-group-item bg-light text-center">My Orders</li>
+                                    <li class="list-group-item bg-light text-center">Vestibulum at eros</li>
+                                    <li class="list-group-item bg-light text-center">Vestibulum at eros</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+
+                        <!-- my_order -->
+
+                        <div class="card border-secondary mt-3">
+                            <div class="card-header border-secondary">
+                                Featured
+                            </div>
+                            <div class="card-body">                                
+                                {% if orders %}
+                                    {% for order in orders %}                                    
+                                    <h5 class="card-title">{{forloop.counter}}</h5>                                    
+                                        <img style="height: 80px;" class="rounded-circle" src="{{order.product.image.url}}" alt="">
+                                        {{order.product.name}}
+                                        {{order.date}}
+                                        {{order.price|currency}}
+                                        {{order.quantity}}
+                                        {{order.quantity|multiply:order.price|currency}}
+                                        {% if order.status %}
+                                        <small class="badge badge-success ">Completed</small>
+                                        {%else%}
+                                        <small class="badge badge-warning ">Pending</small>
+                                        {% endif %}</p>
+                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    {% endfor %}
+                                {% else%}
+                                <h5 class="card-title">No orders placed</h5>
+                                {% endif%}
+
+                            </div>
+                        </div>
+
+                        <!-- my_order -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
