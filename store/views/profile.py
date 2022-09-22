@@ -28,5 +28,5 @@ class Profile(View):
         customer = model_to_dict(Customer.get_customer_by_id(request.session.get("customer")))
         fullname = customer.get("first_name") + " "+ customer.get("last_name")
         if self.my_orders:
-            return render(request, 'profile.html', {"my_orders":self.my_orders,"orders":self.orders})
+            return render(request, 'profile.html', {"my_orders":self.my_orders,"orders":self.orders,"fullname":fullname})
         return render(request, 'profile.html', {"fullname":fullname})

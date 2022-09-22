@@ -21,7 +21,7 @@ class AdminCustomer(admin.ModelAdmin):
 
 
 class AdminOrder(admin.ModelAdmin):
-    list_display = ['product', "customer", "quantity", "price", "date"]
+    list_display = ['product', "customer", "quantity", "price", "date","address","mob_number"]
 
 
 # Register models here to show in admin pannel

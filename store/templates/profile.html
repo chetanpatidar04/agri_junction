@@ -39,34 +39,43 @@
 
                         <!-- my_order -->
 
-                        <div class="card border-secondary mt-3">
+                        <div class="card border-secondary ">
                             <div class="card-header border-secondary">
                                 Featured
                             </div>
-                            <div class="card-body">                                
+                            <div class="card-body">
                                 {% if orders %}
-                                    {% for order in orders %}                                    
-                                    <h5 class="card-title">{{forloop.counter}}</h5>                                    
-                                        <img style="height: 80px;" class="rounded-circle" src="{{order.product.image.url}}" alt="">
-                                        {{order.product.name}}
-                                        {{order.date}}
-                                        {{order.price|currency}}
-                                        {{order.quantity}}
-                                        {{order.quantity|multiply:order.price|currency}}
-                                        {% if order.status %}
-                                        <small class="badge badge-success ">Completed</small>
-                                        {%else%}
-                                        <small class="badge badge-warning ">Pending</small>
-                                        {% endif %}</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                    {% endfor %}
+                                {% for order in orders %}
+                                <div class="card mb-3">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img style="height: 150px; width :150px" class="rounded mt-3 mb-3 ml-3 mr-3"
+                                                src="{{order.product.image.url}}" alt="">                                            
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{order.product.name}}</h5>
+                                                {% if order.status %}
+                                                <div><small class="badge badge-success float-right">Completed</small></div>
+                                                {%else%}
+                                                <div><small class="badge badge-warning float-right">Pending</small></div>
+                                                {% endif %}
+                                                <div class="card-text float-left">Ordered on : {{order.date}}</div></br>                                                
+                                                <div class="card-text ">Mob number: {{order.mob_number}}</div>
+                                                <div class="card-text ">Delevery Address: {{order.address}}</div>
+                                                <div class="card-text float-left">Quanity: {{order.quantity}}</div></br>
+                                                <div class="card-text ">Price: {{order.price|currency}}</div>
+                                                <div class="card-text float-right">Total: {{order.quantity|multiply:order.price|currency}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
                                 {% else%}
                                 <h5 class="card-title">No orders placed</h5>
                                 {% endif%}
-
                             </div>
                         </div>
-
                         <!-- my_order -->
                     </div>
                 </div>
