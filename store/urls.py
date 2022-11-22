@@ -9,7 +9,8 @@ from .views.home import Index
 from django.conf import settings
 from django.conf.urls.static import static
 from .middlewares.auth import auth_middleware
-from .views.profile import Profile
+from .views.profile import Profile,profile_update,password_update
+# from .views.profile import Profile,profile_update,password_update
 
 urlpatterns = [
     path('',Index.as_view(), name="homepage"),
@@ -19,5 +20,9 @@ urlpatterns = [
     path('cart',auth_middleware(Cart.as_view()), name="cart"),
     path('checkout',auth_middleware(Checkout.as_view()), name="checkout"),
     path('view_order',auth_middleware(View_order.as_view()), name="view_order"),
-    path('profile',auth_middleware(Profile.as_view()), name="profile")
+    path('profile',auth_middleware(Profile.as_view()), name="profile"),
+    path('profile_update',profile_update, name="profile_update"),
+    path('password_update',password_update, name="password_update"),
+    # path('Orders',orders, name="orders")
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

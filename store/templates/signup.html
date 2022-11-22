@@ -1,6 +1,5 @@
 {% extends "base.html"%}
 {% block content%}
-
 <div class="container">
     <div class="col-lg-8 mx-auto border rounded pt-3">
         <h3 class="alert alert-light border rounded text-center"> Create an Account</h3>
@@ -11,19 +10,13 @@
                 {{error}}
             </div>
             {%endif%}
-
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label for="validationCustom01">First name</label>
                     <input type="text" name="first_name" class="form-control form-control-sm" id=""
-                        placeholder="First name" maxlength="40" minlength="2" required value = {{values.first_name}}>
-                        <!-- {% if error %}
-                        <div class="invalid-feedback">
-                            {{error}}
-                        </div>
-                        {%endif%} -->
+                        placeholder="First name" maxlength="40" minlength="2" required value={{values.first_name}}>
                     <div class="invalid-feedback">
-                        Please enter first name
+                        Please enter valid first name
                     </div>
                     <div class="valid-feedback">
                         Looks good!
@@ -32,12 +25,12 @@
                 <div class="col-md-6 mb-3">
                     <label for="validationCustom02">Last name</label>
                     <input type="text" name="last_name" class="form-control form-control-sm" id=""
-                        placeholder="Last name" maxlength="40" minlength="2" required value = {{values.last_name}}>
+                        placeholder="Last name" maxlength="40" minlength="2" required value={{values.last_name}}>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                     <div class=" invalid-feedback">
-                        Please enter last name
+                        Please enter valid last name
                     </div>
                 </div>
             </div>
@@ -45,7 +38,7 @@
                 <div class="col-md-6 mb-3">
                     <label for="validationCustom04">Email</label>
                     <input type="email" name="email" class="form-control form-control-sm" id="validationCustom03"
-                        placeholder="example@gmail.com"  maxlength="100" required value = {{values.email}}>
+                        placeholder="example@gmail.com" maxlength="100" required value={{values.email}}>
                     <div class="invalid-feedback">
                         Please provide a valid email.
                     </div>
@@ -69,9 +62,10 @@
                 <div class="col-md-12 mb-3">
                     <label for="validationCustom04">Mobile number</label>
                     <input type="tel" name="mob_number" class="form-control form-control-sm" id="validationCustom05"
-                        pattern="[0-9]{10}" placeholder="0123456789" maxlength="10" required value = {{values.mob_number}}>
+                        pattern="[0-9]{10}" placeholder="0123456789" maxlength="10" required
+                        value={{values.mob_number}}>
                     <div class=" invalid-feedback">
-                        Please enter mobile number
+                        Please enter valid mobile number
                     </div>
                     <div class="valid-feedback">
                         Looks good!
@@ -81,9 +75,9 @@
                     <!-- <div class="form-group"> -->
                     <label for="inputAddress">Address</label>
                     <input type="text" name="address" class="form-control form-control-sm" id="inputAddress"
-                        placeholder="1234 Main St" maxlength="500" required value = {{values.address}}>
+                        placeholder="1234 Main St" maxlength="500" required value={{values.address}}>
                     <div class=" invalid-feedback">
-                        Please enter address </div>
+                        Please enter valid address </div>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -93,26 +87,53 @@
                 <div class=" col-md-4 mb-3">
                     <label for="inputCity">City</label>
                     <input type="text" name="city" class="form-control form-control-sm" id="inputCity"
-                        placeholder="City" maxlength="50"  required value = {{values.city}}>
+                        placeholder="City" maxlength="50" required value={{values.city}}>
                     <div class=" invalid-feedback">
-                        Please enter city </div>
+                        Please enter valid city </div>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
                 <div class=" col-md-4 mb-3">
                     <label for="inputState">State</label>
-                    <select id="inputState" class="form-control form-control-sm" maxlength="50" >
-                        <option selected>Choose...</option>
-                        <option>...</option>
+                    <select id="inputState" class="form-control form-control-sm" maxlength="50">
+                        <option selected>Andhra Pradesh</option>
+                        <option>Arunachal Pradesh</option>
+                        <option>Assam</option>
+                        <option>Bihar</option>
+                        <option>Chhattisgarh</option>
+                        <option>Goa</option>
+                        <option>Gujrat</option>
+                        <option>Haryana</option>
+                        <option>Himachal Pradesh</option>
+                        <option>Jammu and Kashmir</option>
+                        <option>Jharkhand</option>
+                        <option>Karnataka</option>
+                        <option>Kerala</option>
+                        <option>Madhya Pradesh </option>
+                        <option>Maharashtra</option>
+                        <option>Manipur</option>
+                        <option>Meghalaya</option>
+                        <option>Mizoram</option>
+                        <option>Nagaland</option>
+                        <option>Odisha</option>
+                        <option>Punjab</option>
+                        <option>Rajasthan</option>
+                        <option>Sikkim</option>
+                        <option>Tamil Nadu</option>
+                        <option>Telangana</option>
+                        <option>Tripura</option>
+                        <option>Uttar Pradesh</option>
+                        <option>Uttarakhand</option>
+                        <option>West Bengal</option>
                     </select>
                 </div>
                 <div class=" col-md-4 mb-3">
-                    <label for="inputZip">Pincode</label>
-                    <input type="text" name="pincode" q2qclass="form-control form-control-sm" id="inputZip"
-                        placeholder="465110" maxlength="6" required value = {{values.pincode}}>
+                    <label for="inputCity">Pincode</label>
+                    <input type="text" name="pincode" class="form-control form-control-sm" id="inputZip"
+                        placeholder="465110" maxlength="6" required value={{values.pincode}}>
                     <div class=" invalid-feedback">
-                        Please enter pincode </div>
+                        Please enter valid city </div>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
@@ -120,14 +141,33 @@
             </div>
             <div class=" form-row ">
                 <div class=" col-md-4 mb-3">
-                    <button class="btn btn-primary btn-sm" type="submit">Signup</button>
+                    <!-- <button class="btn btn-primary btn-sm" type="submit">Signup</button> -->
                     <button type="submit" class="btn btn-outline-primary btn-sm">Signup</button>
-                    <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Block level button</button> -->
+                    <!-- Button trigger modal -->
                 </div>
             </div>
-
         </form>
-
+        <!-- Modal -->
+        <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+        <!-- Modal -->
         <script>
             // Example starter JavaScript for disabling form submissions if there are invalid fields
             (function () {
@@ -148,8 +188,6 @@
                 }, false);
             })();
         </script>
-
     </div>
 </div>
-<!-- </form> -->
 {%endblock%}

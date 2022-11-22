@@ -44,11 +44,6 @@ class Signup(View):
                             city=city,
                             state=state,
                             pincode=pincode)
-        # response = customer.register()
-        # if response == "signup success":
-        #     return redirect("homepage")
-        # else:
-        #     return render(request, 'signup.html')
         error_message = self.validateCustomer(customer)
         if not error_message:
             customer.password = make_password(customer.password)
@@ -83,7 +78,6 @@ class Signup(View):
             error_message = 'Email address and Mobile Number Already Registered..'
         elif customer.isExists_email():
             error_message = 'Email Address Already Registered..'
-        # saving
         elif customer.isExists_mob_number():
             error_message = 'Mobile Number Already Registered..'
         return error_message

@@ -2,85 +2,429 @@
 {% block content %}
 {% load cart%}
 {% load custom_filter%}
+{% if request.session.profile_update_msg %}
+<script>
+  alertify.set('notifier', 'position', 'top-right');
+  var delay = alertify.get('notifier', 'delay');
+  alertify.set('notifier', 'delay', 2);
+  alertify.success("{{request.session.profile_update_msg}}");
+  alertify.set('notifier', 'delay', delay);
+</script>
+{% endif %}
+
 <div class="container-fluid mt-3">
-    <div class="border border-secondary rounded p-4 m-4">
-        <div class="card border mx-auto">
-            <div class="p-3 card-header text-primary">
-                <h4>{{fullname}}</h4>
+  <div class="border border-secondary rounded p-4 m-4">
+    <div class="card border mx-auto">
+      <div class="p-3 card-header text-primary">
+        <h4>{{request.session.customer_firstname }}&nbsp;{{ request.session.customer_lastname }}</h4>
+      </div>
+      <div class="card-body text-dark">
+        <div class="row">
+          <div class="col-sm-3 mx-auto mt-3">
+            <div class="card bg-light mb-3 " style="max-width: 18rem;">
+              <div class="card border-secondary">
+                <ul class="list-group text-center">
+                  <form action="/profile" method="GET">
+                    <input class="list-group-item list-group-item-action list-group-item-dark" type="submit"
+                      value="Profile Information" readonly>
+                  </form>
+                  <!-- <form action="/profile" method="POST">
+                    {% csrf_token %}
+                    <input hidden type="text" value="True" name="my_orders" readonly>
+                    <input class="list-group-item list-group-item-action list-group-item-dark" type="submit"
+                      value="My Orders" id="btnClick" readonly>
+                  </form> -->
+                  <form action="/view_order" method="GET">
+                    <input class="list-group-item list-group-item-action list-group-item-dark" type="submit"
+                      value="Orders" readonly>
+                  </form>
+                  <form action="/password_update" method="GET">
+                    <input class="list-group-item list-group-item-action list-group-item-dark" type="submit"
+                      value="Password Update" readonly>
+                  </form>
+                  <!-- <li class="list-group-item bg-light text-center">Profile Information</li> -->
+                  <li class="list-group-item bg-light text-center">My Orders</li>
+                  <li class="list-group-item bg-light text-center">Vestibulum at eros</li>
+                  <li class="list-group-item bg-light text-center">Vestibulum at eros</li>
+                </ul>
+              </div>
             </div>
-            <div class="card-body text-dark">
-                <div class="row">
-                    <div class="col-sm-3 mx-auto mt-3">
-                        <div class="card bg-light mb-3 " style="max-width: 18rem;">
-                            <div class="card border-secondary">
-                                <ul class="list-group ">
-                                    <!-- <form>
-                                        <input hidden type="text" value="True" name="profile_information">
-                                        <input
-                                            class="list-group-item list-group-item-action list-group-item-dark text-center"
-                                            type="submit" value="Profile Information" readonly>
-                                    </form> -->
-                                    <form action="/profile" method="POST">
-                                        {% csrf_token %}
-                                        <input hidden type="text" value="True" name="my_orders">
-                                        <input
-                                            class="list-group-item list-group-item-action list-group-item-dark text-center"
-                                            type="submit" value="My Orders" readonly>
-                                    </form>
-                                    <!-- <li class="list-group-item bg-light text-center">Profile Information</li> -->
-                                    <li class="list-group-item bg-light text-center">My Orders</li>
-                                    <li class="list-group-item bg-light text-center">Vestibulum at eros</li>
-                                    <li class="list-group-item bg-light text-center">Vestibulum at eros</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
+          </div>
+          <!-- main -->
+          {% if customer %}
+          <div class="col-sm-9 mt-3">
+            <div class="card border-secondary ">
+              <div class="card-body">
+                <h3 class="alert alert-light border-secondary rounded text-center"> Personal Information</h3>
+                <form action="/profile_update" method="POST" class="needs-validation" novalidate>
+                  <div class="card">
+                    <div class="card-body">
+                      {% csrf_token %}
+                      {% if error %}
+                      <div class="alert alert-danger" role="alert">
+                        {{error}}
+                      </div>
+                      {%endif%}
 
-                        <!-- my_order -->
-
-                        <div class="card border-secondary ">
-                            <div class="card-header border-secondary">
-                                Featured
-                            </div>
-                            <div class="card-body">
-                                {% if orders %}
-                                {% for order in orders %}
-                                <div class="card mb-3">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <img style="height: 150px; width :150px" class="rounded mt-3 mb-3 ml-3 mr-3"
-                                                src="{{order.product.image.url}}" alt="">                                            
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{order.product.name}}</h5>
-                                                {% if order.status %}
-                                                <div><small class="badge badge-success float-right">Completed</small></div>
-                                                {%else%}
-                                                <div><small class="badge badge-warning float-right">Pending</small></div>
-                                                {% endif %}
-                                                <div class="card-text float-left">Ordered on : {{order.date}}</div></br>                                                
-                                                <div class="card-text ">Mob number: {{order.mob_number}}</div>
-                                                <div class="card-text ">Delevery Address: {{order.address}}</div>
-                                                <div class="card-text float-left">Quanity: {{order.quantity}}</div></br>
-                                                <div class="card-text ">Price: {{order.price|currency}}</div>
-                                                <div class="card-text float-right">Total: {{order.quantity|multiply:order.price|currency}}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                                {% else%}
-                                <h5 class="card-title">No orders placed</h5>
-                                {% endif%}
-                            </div>
+                      <div class="form-row">
+                        <div class="col-md-6">
+                          <label for="validationCustom01">First name</label>
+                          <script type="text/javascript">
+                            $(document).ready(function () {
+                              $("button").click(function () {
+                                $(this).next().removeAttr("disabled")
+                                  .focus()
+                                  .val("");
+                                document.getElementById("save_change").removeAttribute("disabled")
+                              });
+                            });
+                          </script>
+                          <br><button type="button" class="col-md-2 float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <input type="text" name="first_name" class="col-md-10 form-control form-control-sm"
+                            disabled="disabled" id="validationCustom00" maxlength="50" minlength="2"
+                            value="{{customer.first_name}}" required>
+                          <div class="invalid-feedback">
+                            Please enter valid first name
+                          </div>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
                         </div>
-                        <!-- my_order -->
-                    </div>
-                </div>
+                        <div class="col-md-6 mb-3">
+                          <label for="validationCustom02">Last name</label>
+                          <br><button type="button" class="col-md-2 float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <input type="text" name="last_name" class="col-md-10 form-control form-control-sm"
+                            id="last_name" disabled="disabled" maxlength="40" minlength="2" required
+                            value={{customer.last_name}}>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                          <div class=" invalid-feedback">
+                            Please enter a valid last name
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-md-8 mb-3">
+                          <label for="validationCustom04">Email</label>
+                          <br><button type="button" class="float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <input type="email" name="email" disabled="disabled"
+                            class="form-control form-control-sm col-md-11" id="validationCustom03"
+                            placeholder="example@gmail.com" maxlength="100" required value={{values.email}}>
+                          <div class="invalid-feedback">
+                            Please provide a valid email.
+                          </div>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="validationCustom04">Mobile number</label>
+                          <br><button type="button" class="col-md-2 float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <input type="tel" name="mob_number" class="col-md-10 form-control form-control-sm"
+                            disabled="disabled" id="validationCustom05" pattern="[0-9]{10}" maxlength="10" required
+                            value="0123456789">
+                          <div class=" invalid-feedback">
+                            Please enter valid mobile number
+                          </div>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-md-12 mb-3">
+                          <label for="inputAddress">Address</label>
+                          <br><button type="button" class="col-md-1 float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <input type="text" name="address" disabled="disabled"
+                            class="col-sm-11 form-control form-control-sm" id="inputAddress" maxlength="500" required
+                            value={{customer.address}}>
+                          <div class=" invalid-feedback">
+                            Please enter valid address </div>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class=" col-md-4 mb-3">
+                          <label for="inputCity">City</label>
+                          <br><button type="button" class="col-md-2 float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <input type="text" name="city" disabled="disabled"
+                            class="col-md-10 form-control form-control-sm" id="inputCity" maxlength="50" required
+                            value={{customer.city}}>
+                          <div class=" invalid-feedback">
+                            Please enter city </div>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                        <div class=" col-md-4 mb-3">
+                          <label for="inputState">State</label>
+                          <br><button type="button" class="col-md-2 float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <select id="inputState" class="col-md-10 form-control form-control-sm" maxlength="50"
+                            disabled="disabled">
+                            <option selected>Andhra Pradesh</option>
+                            <option>Arunachal Pradesh</option>
+                            <option>Assam</option>
+                            <option>Bihar</option>
+                            <option>Chhattisgarh</option>
+                            <option>Goa</option>
+                            <option>Gujrat</option>
+                            <option>Haryana</option>
+                            <option>Himachal Pradesh</option>
+                            <option>Jammu and Kashmir</option>
+                            <option>Jharkhand</option>
+                            <option>Karnataka</option>
+                            <option>Kerala</option>
+                            <option>Madhya Pradesh </option>
+                            <option>Maharashtra</option>
+                            <option>Manipur</option>
+                            <option>Meghalaya</option>
+                            <option>Mizoram</option>
+                            <option>Nagaland</option>
+                            <option>Odisha</option>
+                            <option>Punjab</option>
+                            <option>Rajasthan</option>
+                            <option>Sikkim</option>
+                            <option>Tamil Nadu</option>
+                            <option>Telangana</option>
+                            <option>Tripura</option>
+                            <option>Uttar Pradesh</option>
+                            <option>Uttarakhand</option>
+                            <option>West Bengal</option>
+                          </select>
+                        </div>
+                        <div class=" col-md-4 mb-3">
+                          <label for="inputZip">Pincode</label>
+                          <br><button type="button" class="col-md-2 float-right btn"><i class="fa fa-pencil"
+                              aria-hidden="true"></i></button>
+                          <input type="text" name="pincode" class="col-md-10 form-control form-control-sm" id="inputZip"
+                            maxlength="6" required value={{customer.pincode}} disabled="disabled">
+                          <div class=" invalid-feedback">
+                            Please enter pincode </div>
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary" data-toggle="modal" id="save_change"
+                            data-target="#exampleModal" disabled="disabled">
+                            Save Changes
+                      </button>
+                </form>
+                <script>
+                  // Example starter JavaScript for disabling form submissions if there are invalid fields
+                  (function () {
+                    'use strict';
+                    window.addEventListener('load', function () {
+                      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                      var forms = document.getElementsByClassName('needs-validation');
+                      // Loop over them and prevent submission
+                      var validation = Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                          if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                          }
+                          form.classList.add('was-validated');
+                        }, false);
+                      });
+                    }, false);
+                  })();
+                </script>
+              </div>
             </div>
+          </div>
         </div>
+        {%endif%}
+        <!----------------------------->
+        {% if update_password %}
+        {% if request.session.pass_update_msg %}
+        <script>
+          alertify.set('notifier', 'position', 'top-right');
+          var delay = alertify.get('notifier', 'delay');
+          alertify.set('notifier', 'delay', 2);
+          alertify.success("{{request.session.pass_update_msg}}");
+          alertify.set('notifier', 'delay', delay);    
+        </script>
+        {% endif %}
+        <div class="col-sm-9 mt-3">
+          <div class="card border-secondary ">
+            <div class="card-body">
+              <h3 class="alert alert-light border-secondary rounded text-center"> Password Update</h3>
+              <form action="/password_update" method="POST" class="needs-validation" novalidate>
+                <div class="card">
+                  <div class="card-body">
+                {% csrf_token %}
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                  {{error}}
+                </div>
+                {%endif%}
+                <center>
+                  <div class="col-md-5 mb-3">
+                    <label class="float-left">Old Password</label>
+                    <input type="password" name="old_password" class="form-control form-control-sm" maxlength="200"
+                      required>
+                  </div>
+                  <div class="col-md-5 mb-3">
+                    <label for="validationCustom04" class="float-left">New Password</label>
+                    <input type="password" name="new_password" class="form-control form-control-sm"
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="200" required>
+                    <div class="float-left invalid-feedback">
+                      Must contain at least one number and one uppercase and lowercase letter, and at least 8 or
+                      more characters
+                    </div>
+                    <div class="valid-feedback">
+                      Looks good!
+                    </div>
+                  </div>
+                  <div class="col-md-5 mb-3">
+                    <label for="validationCustom04" class="float-left">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control form-control-sm"
+                      id="validationCustom04" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" maxlength="200" required>
+                    <div class=" invalid-feedback float-left">
+                      Must contain at least one number and one uppercase and lowercase letter, and at least 8 or
+                      more
+                      characters
+                    </div>
+                    <div class="valid-feedback float-left">
+                      Looks good!
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-sm btn-secondary">Update Password</button>
+                </center>
+                </div>
+                </div>
+              </form>
+              <script>
+                // var flag = true;
+                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function () {
+                  'use strict';
+                  window.addEventListener('load', function () {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                      form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                          event.stopPropagation();
+                          event.preventDefault();
+                        }
+                        form.classList.add('was-validated');
+                      }, false);
+                    });
+                  }, false);
+                })();
+              </script>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <script>
+          $('#btnClick').on('click', function () {
+            if ($('#1').css('display') != 'none') {
+              $('#2').show().siblings('div').hide();
+            } else if ($('#2').css('display') != 'none') {
+              $('#1').show().siblings('div').hide();
+            }
+          });
+        </script>
+        {% if orders%}
+        <div class="col-sm-9 mt-3">
+          <div class="card border-secondary ">
+            <div class="card-body">
+              <h3 class="alert alert-light border-secondary rounded text-center"> My Orders</h3>
+              {% if orders %}
+              {% for order in my_orders %}
+              <div class="card mb-3">
+                <div class="row">
+                  <div class="col-md-3">
+                    <img style="height: 150px; width :150px" class="rounded mt-3 mb-3 ml-3 mr-3"
+                      src="{{order.product.image.url}}" alt="">
+                  </div>
+                  <div class="col-sm-9">
+                    <div class="card-body">
+                      <h5 class="card-title">{{order.product.name}}</h5>
+                      {% if order.status %}
+                      <div><small class="badge badge-success float-right">Completed</small>
+                      </div>
+                      {%else%}
+                      <div><small class="badge badge-warning float-right">Pending</small>
+                      </div>
+                      {% endif %}
+                      <div class="card-text float-left">Ordered on : {{order.date}}</div></br>
+                      <div class="card-text ">Mob number: {{order.mob_number}}</div>
+                      <div class="card-text ">Delevery Address: {{order.address}}</div>
+                      <div class="card-text float-left">Quanity: {{order.quantity}}</div></br>
+                      <div class="card-text ">Price: {{order.price|currency}}</div>
+                      <div class="card-text float-right">Total:
+                        {{order.quantity|multiply:order.price|currency}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% else%}
+              <h5 class="card-title">No orders placed</h5>
+              {% endif%}
+              <!-- cutomer -->
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-9 mt-3"></div>
+        <!-- 
+          <div class="card border-secondary ">
+            <div class="card-body">
+              <h3 class="alert alert-light border-secondary rounded text-center"> My Orders</h3>              
+                <table class="table">
+                  <thead>
+                      <tr>
+                          <th>Sno.</th>
+                          <th>Image</th>
+                          <th>Product</th>
+                          <th>Date</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th>Total</th>
+                          <th>Status</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for order in my_orders %}
+                      <tr>
+                          <td>{{forloop.counter}}</td>
+                          <td><img style="height: 80px;" class="rounded-circle" src="{{order.product.image.url}}" alt=""></td>
+                          <td>{{order.product.name}}</td>
+                          <td>{{order.date}}</td>
+                          <td>{{order.price|currency}}</td>
+                          <td>{{order.quantity}}</td>
+                          <td>{{order.quantity|multiply:order.price|currency}}</td>
+                          {% if order.status %}
+                          <td><small class="badge badge-success ">Completed</small></td>
+                          {%else%}
+                          <td><small class="badge badge-warning ">Pending</small></td>
+                          {% endif %}
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div> -->
+        {%endif%}
+      </div>
     </div>
+  </div>
+</div>
 </div>
 {% endblock %}

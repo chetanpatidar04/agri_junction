@@ -9,7 +9,7 @@
     var delay = alertify.get('notifier', 'delay');
     alertify.set('notifier', 'delay', 2);
     alertify.success("{{request.session.cart_msg}}");
-    alertify.set('notifier', 'delay', delay);
+    alertify.set('notifier', 'delay', delay);    
 </script>
 {% endif %}
 <div class="container-fluid mt-3">
@@ -51,9 +51,9 @@
                 <h4>My Cart ({{request.session.cart.keys|length}})</h4>
             </div>
             <div class="card-body text-dark">
-                <p class="card-title"><i class="fa fa-mobile mr-4" aria-hidden="true"></i>Mob Number :
+                <p class="card-title"><i class="fa fa-mobile fa-2x mr-4" aria-hidden="true"></i>Mob Number :
                     {{request.session.mob_number}}</p>
-                <p class="card-text"><i class="fa fa-truck mr-2"></i> Delivery Address : {{request.session.address}},
+                <p class="card-text"><i class="fa fa-truck fa-flip-horizontal fa-2x mr-2"></i> Delivery Address : {{request.session.address}},
                     Pincode : {{request.session.pincode}}</p>
                 <a href="#" data-toggle="modal" data-target="#exampleModal"
                     class="btn btn-secondary btn-sm rounded col-sm-3 float-right">Change address or Mob number</a>

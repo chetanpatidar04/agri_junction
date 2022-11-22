@@ -24,6 +24,8 @@ class Login(View):
             if flag:
                 request.session["customer"] = customer.id
                 request.session["customer_email"] = customer.email
+                request.session["customer_firstname"] = customer.first_name
+                request.session["customer_lastname"] = customer.last_name
                 if Login.return_url:
                     return HttpResponseRedirect(Login.return_url)
                 else:
