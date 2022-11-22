@@ -76,6 +76,7 @@ WSGI_APPLICATION = 'kksk.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
+DATABASES = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -116,9 +117,3 @@ MEDIA_URL = "/images/downloads/"
 MEDIA_ROOT = BASE_DIR
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CSRF_TRUSTED_ORIGINS = ['https://agri-junction.herokuapp.com']
-STATICSFILES_DIRS = os.path.join(BASE_DIR,"static")
-STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles_build","static")
