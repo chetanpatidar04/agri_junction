@@ -123,5 +123,7 @@ MEDIA_ROOT = BASE_DIR
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATICFILES_DIRS = [BASE_DIR/'static',]
-STATIC_ROOT = BASE_DIR/'staticfiles'
+# STATICFILES_DIRS = [BASE_DIR/'static',]
+# STATIC_ROOT = BASE_DIR/'staticfiles'
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT  =   os.path.join(PROJECT_ROOT, 'staticfiles')
