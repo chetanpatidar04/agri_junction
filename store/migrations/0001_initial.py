@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=50)),
                 ('price', models.IntegerField(default=0)),
                 ('description', models.CharField(blank=True, default='', max_length=200, null=True)),
-                ('image', models.ImageField(upload_to='uploads/products/')),
+                ('image', models.ImageField(upload_to='static/products/')),
             ],
         ),
     ]
